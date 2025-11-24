@@ -1,0 +1,5 @@
+text,label
+"[SERVICE] hostess greeted us immediately",positive
+"[FOOD] steak arrived cold",negative
+"[PRICE] specials were reasonably priced",positive
+"[AMBIENCE] room was too loud",negative
