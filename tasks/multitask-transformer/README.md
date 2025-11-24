@@ -17,3 +17,17 @@ Train a shared encoder with dual heads to jointly predict aspect (teacher vs cou
 
 ## Reporting
 Highlight whether multi-task learning improves sentiment performance or stability under noisy aspect labels, including qualitative examples.
+
+## How to run
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Execute the provided dual-head experiment script (synthetic data with controllable aspect noise):
+   ```bash
+   python -m src.experiments --noise 0.3 --hierarchical --aspect-weight 1.2
+   ```
+   - Omit `--hierarchical` to compare flat multi-task training.
+   - Adjust `--noise` to simulate different aspect corruption rates.
+3. Replace the synthetic dataset with your real CSV/TSV by adapting `src/data.py` (or writing a small loader) to emit real examples, then rerun the command above to evaluate on your data.
+4. Log results (macro F1 for both heads) and compare against single-task baselines printed by the script.

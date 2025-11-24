@@ -18,3 +18,37 @@ Leverage modern sentence embeddings to improve aspect-aware sentiment classifica
 
 ## Reporting
 Document the best model/configuration, hyperparameters, and notable errors. Include scripts/notebooks and random seeds for reproducibility.
+
+## How to run
+1. Install the core and sentence-transformer dependencies:
+   ```bash
+   pip install -r requirements.txt
+   pip install sentence-transformers
+   ```
+2. Generate embeddings for your dataset (example with E5 and an aspect prompt):
+   ```bash
+   python - <<'PY'
+   from sentence_transformers import SentenceTransformer
+   import pandas as pd
+   df = pd.read_csv('data/teacher_course.csv')
+   model = SentenceTransformer('intfloat/e5-base-v2')
+   df['prompted'] = df['aspect'].str.lower().radd('Aspect: ').str.cat(df['comments'], sep=' | Text: ')
+   embeddings = model.encode(df['prompted'].tolist(), batch_size=64, convert_to_numpy=True)
+   pd.DataFrame(embeddings).to_parquet('outputs/sentence_embeddings/e5_embeddings.parquet')
+   PY
+   ```
+3. Train a lightweight classifier (e.g., Logistic Regression) on the saved embeddings:
+   ```bash
+   python - <<'PY'
+   import pandas as pd
+   from sklearn.linear_model import LogisticRegression
+   from sklearn.model_selection import train_test_split
+   from sklearn.metrics import classification_report
+   X = pd.read_parquet('outputs/sentence_embeddings/e5_embeddings.parquet')
+   y = pd.read_csv('data/teacher_course.csv')['sentiment']
+   X_train, X_val, y_train, y_val = train_test_split(X, y, stratify=y, test_size=0.2, random_state=42)
+   clf = LogisticRegression(max_iter=2000)
+   clf.fit(X_train, y_train)
+   print(classification_report(y_val, clf.predict(X_val)))
+   PY
+   ```

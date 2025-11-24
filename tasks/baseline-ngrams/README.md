@@ -20,3 +20,16 @@ Establish a transparent baseline for aspect-aware sentiment analysis using bag-o
 
 ## Reporting
 Summarize best-performing configuration, runtime, and error patterns (e.g., negation, aspect confusion). Provide reproducible commands or notebook cells.
+
+## How to run
+1. Install dependencies (ideally inside a virtual environment):
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Run the baseline pipeline on your tabular dataset (CSV/TSV) and save artifacts/metrics:
+   ```bash
+   python sentiment_experiment.py --data data/teacher_course.csv --output outputs/baseline --mode joint
+   ```
+   - Use `--mode aspect` to train separate models per aspect.
+   - Adjust `--test-size` if you want a different validation split (default 0.2).
+3. Inspect the generated `metrics.json`, confusion matrices, and `*_misclassified.csv` files in `outputs/baseline/`.

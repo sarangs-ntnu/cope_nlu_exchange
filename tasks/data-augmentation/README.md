@@ -18,3 +18,28 @@ Increase training data diversity and measure robustness of sentiment models to n
 
 ## Reporting
 Summarize augmentation recipes, sizes, and their impact on metrics. Provide scripts/configs to reproduce augmented datasets.
+
+## How to run
+1. Install augmentation dependencies (example uses `nlpaug`):
+   ```bash
+   pip install -r requirements.txt
+   pip install nlpaug
+   ```
+2. Generate augmented samples that preserve aspect cues:
+   ```bash
+   python - <<'PY'
+   import nlpaug.augmenter.word as naw
+   import pandas as pd
+
+   df = pd.read_csv('data/teacher_course.csv')
+   aug = naw.SynonymAug(aug_src='wordnet', aug_min=1, aug_max=2)
+   df['augmented'] = [aug.augment(text) for text in df['comments']]
+   df.to_csv('outputs/data_augmentation/augmented.csv', index=False)
+   PY
+   ```
+3. Merge original and augmented rows, then retrain your best model (e.g., the n-gram baseline):
+   ```bash
+   cat data/teacher_course.csv outputs/data_augmentation/augmented.csv > outputs/data_augmentation/combined.csv
+   python sentiment_experiment.py --data outputs/data_augmentation/combined.csv --output outputs/data_augmentation/run --mode joint
+   ```
+4. Evaluate robustness by running the same model on a noised validation split (e.g., add typos via `nlpaug` before inference) and compare macro F1 to the clean validation metrics.

@@ -15,3 +15,34 @@ Quantify transferability between teacher-focused and course-focused sentiment da
 
 ## Reporting
 Highlight whether shared modeling narrows the gap between aspects and provide recommendations on when to train specialized vs. unified models.
+
+## How to run
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Train on a single aspect and evaluate on the other using the TF-IDF baseline:
+   ```bash
+   python - <<'PY'
+   import pandas as pd
+   from pathlib import Path
+   from sentiment_experiment import load_dataset, stratified_split, evaluate_aspect_specific_models, evaluate_joint_models
+
+   df = load_dataset(Path('data/teacher_course.csv'))
+   teacher_df = df[df['aspect'].str.lower() == 'teacher']
+   course_df = df[df['aspect'].str.lower() == 'course']
+
+   # train on teacher, test on course
+   train_df, _ = stratified_split(teacher_df, test_size=0.0)
+   evaluate_aspect_specific_models(train_df, course_df, Path('outputs/cross_domain/teacher_to_course'))
+
+   # train on course, test on teacher
+   train_df, _ = stratified_split(course_df, test_size=0.0)
+   evaluate_aspect_specific_models(train_df, teacher_df, Path('outputs/cross_domain/course_to_teacher'))
+   PY
+   ```
+3. Train on combined data with aspect tokens and evaluate per aspect:
+   ```bash
+   python sentiment_experiment.py --data data/teacher_course.csv --output outputs/cross_domain/combined --mode joint
+   ```
+4. Compare macro F1 across the cross-domain and combined runs to quantify transfer gaps.
