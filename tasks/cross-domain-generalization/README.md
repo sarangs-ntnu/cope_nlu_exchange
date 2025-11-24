@@ -15,3 +15,42 @@ Quantify transferability between teacher-focused and course-focused sentiment da
 
 ## Reporting
 Highlight whether shared modeling narrows the gap between aspects and provide recommendations on when to train specialized vs. unified models.
+
+## How to run from the command line
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Train on **teacher only**, evaluate on **course**:
+   ```bash
+   python - <<'PY'
+   from pathlib import Path
+   import pandas as pd
+   from sentiment_experiment import load_dataset, evaluate_aspect_specific_models
+
+   df = load_dataset(Path('data/teacher_course.csv'))
+   teacher_df = df[df['aspect'].str.lower() == 'teacher']
+   course_df = df[df['aspect'].str.lower() == 'course']
+
+   evaluate_aspect_specific_models(teacher_df, course_df, Path('outputs/cross_domain/teacher_to_course'))
+   PY
+   ```
+3. Train on **course only**, evaluate on **teacher**:
+   ```bash
+   python - <<'PY'
+   from pathlib import Path
+   import pandas as pd
+   from sentiment_experiment import load_dataset, evaluate_aspect_specific_models
+
+   df = load_dataset(Path('data/teacher_course.csv'))
+   teacher_df = df[df['aspect'].str.lower() == 'teacher']
+   course_df = df[df['aspect'].str.lower() == 'course']
+
+   evaluate_aspect_specific_models(course_df, teacher_df, Path('outputs/cross_domain/course_to_teacher'))
+   PY
+   ```
+4. Train a **combined joint model** to measure the benefit of shared training:
+   ```bash
+   python sentiment_experiment.py --data data/teacher_course.csv --output outputs/cross_domain/combined --mode joint
+   ```
+5. Compare macro F1 and confusion matrices across `outputs/cross_domain/*` to quantify transfer gaps.
