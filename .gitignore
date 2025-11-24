@@ -1,5 +1,5 @@
 __pycache__/
 *.pyc
-outputs/*.png
-outputs/*.log
-.cache/
+.venv/
+models/*.joblib
+runs/*.json
