@@ -1,0 +1,1 @@
+Experiment tracking outputs are written here. Each training run appends a row to `experiments.csv` with the configuration (including seeds) and macro F1 score. Evaluation metrics from `scripts/evaluate.py` can also be stored here as JSON.
