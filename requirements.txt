@@ -1,1 +1,4 @@
-# All experiments run with the Python standard library; no external installs needed.
+joblib==1.4.2
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.4.2
