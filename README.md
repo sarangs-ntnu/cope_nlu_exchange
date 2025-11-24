@@ -1,27 +1,29 @@
-# Aspect-aware sentiment experiments
+# Aspect-level Comment Classification
 
-This repository contains a script for training and evaluating sentiment models that account for multiple aspects in tabular feedback data.
+This repository demonstrates a lightweight experimentation loop for aspect-level
+sentiment classification when network access to large model weights is
+unavailable. It includes a small synthetic dataset of course-related comments
+(`data/comments.csv`) and a standalone experiment script that emulates
+state-of-the-art embedding backbones via deterministic hashing so that
+comparisons between n-gram features and modern sentence embeddings remain
+possible offline.
 
-## Requirements
+## Running experiments
 
-Install dependencies (network access required):
-
-```bash
-pip install numpy pandas scikit-learn
+```
+python src/experiment.py --data data/comments.csv --output-dir outputs
 ```
 
-## Usage
+The script will:
 
-Provide a CSV or TSV file containing `aspect`, `sentiment`, and `comments` columns.
+- Build a TF–IDF bigram baseline with a logistic regression classifier.
+- Generate hashed embeddings that mimic
+  `sentence-transformers/all-mpnet-base-v2` and `intfloat/e5-base-v2`, testing
+  both aspect prompts (`[aspect] comment`) and concatenated aspect vectors.
+- Sweep a few values of `C` and optional class balancing for the logistic
+  regression head.
+- Report macro F1 per aspect, embedding dimensionality, and end-to-end runtime
+  for each configuration.
 
-```bash
-python sentiment_experiment.py --data path/to/data.csv --output results/
-```
-
-Key options:
-
-- `--mode joint` (default): build a joint TF-IDF vocabulary with an aspect one-hot feature and train a single model.
-- `--mode aspect`: train separate TF-IDF models per aspect and combine their validation predictions for evaluation.
-- `--test-size`: validation split size (default `0.2`).
-
-The script tunes Logistic Regression, Linear SVM, and Naive Bayes with cross-validation, then reports macro F1 and confusion matrices per aspect. Misclassified validation examples are written to CSV files for error analysis.
+Outputs are written to `outputs/embedding_results.json` and
+`outputs/embedding_report.md`.
