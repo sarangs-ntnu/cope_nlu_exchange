@@ -1,29 +1,24 @@
-# Aspect-level Comment Classification
+# Dual-head aspect and sentiment classifier
 
-This repository demonstrates a lightweight experimentation loop for aspect-level
-sentiment classification when network access to large model weights is
-unavailable. It includes a small synthetic dataset of course-related comments
-(`data/comments.csv`) and a standalone experiment script that emulates
-state-of-the-art embedding backbones via deterministic hashing so that
-comparisons between n-gram features and modern sentence embeddings remain
-possible offline.
+This repository provides a compact PyTorch example for training a shared encoder with two heads:
+
+* **Aspect classifier** – predicts whether a review is about a *teacher* or *course*.
+* **Sentiment classifier** – predicts positive vs. negative sentiment.
+
+The script also compares multi-task training against single-task fine-tuning and can inject noisy aspect labels to measure robustness.
 
 ## Running experiments
 
+Install dependencies (PyTorch and scikit-learn must be available in your environment) and run:
+
+```bash
+python -m src.experiments --noise 0.3 --hierarchical --aspect-weight 1.2
 ```
-python src/experiment.py --data data/comments.csv --output-dir outputs
-```
 
-The script will:
+Flags:
 
-- Build a TF–IDF bigram baseline with a logistic regression classifier.
-- Generate hashed embeddings that mimic
-  `sentence-transformers/all-mpnet-base-v2` and `intfloat/e5-base-v2`, testing
-  both aspect prompts (`[aspect] comment`) and concatenated aspect vectors.
-- Sweep a few values of `C` and optional class balancing for the logistic
-  regression head.
-- Report macro F1 per aspect, embedding dimensionality, and end-to-end runtime
-  for each configuration.
+* `--noise` – probability of flipping aspect labels in the synthetic training data.
+* `--hierarchical` – when set, the sentiment head consumes predicted aspect probabilities.
+* `--aspect-weight` – weight assigned to the aspect loss when training jointly.
 
-Outputs are written to `outputs/embedding_results.json` and
-`outputs/embedding_report.md`.
+The command prints macro F1 for both heads and for single-task baselines, making it easy to compare hierarchical vs. flat multi-task training and their robustness to noisy aspect annotations.
