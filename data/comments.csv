@@ -1,0 +1,41 @@
+comment,aspect,label
+"The teacher gives clear explanations and answers every question.",teacher,positive
+"I struggle to follow because the teacher jumps between topics.",teacher,negative
+"The teacher is patient when students get lost.",teacher,positive
+"Lectures feel rushed and the instructor rarely checks understanding.",teacher,negative
+"Teacher provides practical examples that make concepts stick.",teacher,positive
+"The instructor seems unprepared and reads from the slides.",teacher,negative
+"My teacher organizes review sessions before exams.",teacher,positive
+"Class time is wasted due to the teacher's late arrivals.",teacher,negative
+"The new materials include plenty of practice problems.",materials,positive
+"Handouts are outdated and contain several mistakes.",materials,negative
+"The online slides are well structured and easy to search.",materials,positive
+"The workbook diagrams are blurry and hard to read.",materials,negative
+"Assignments come with detailed rubrics and examples.",materials,positive
+"The reference list misses key articles and is poorly formatted.",materials,negative
+"I like the interactive labs that accompany the readings.",materials,positive
+"We still use last year's textbook even after the course changed.",materials,negative
+"The schedule leaves enough time between classes for study.",schedule,positive
+"Lectures are stacked back-to-back with no breaks.",schedule,negative
+"Deadlines are spread out so I can manage other courses.",schedule,positive
+"Assessments often land on the same week making it stressful.",schedule,negative
+"The semester calendar was shared early and rarely changes.",schedule,positive
+"Class times were shifted twice and conflict with my job now.",schedule,negative
+"The weekly routine is predictable and easy to plan for.",schedule,positive
+"Last-minute class cancellations make it hard to plan.",schedule,negative
+"Feedback on projects is specific and actionable.",teacher,positive
+"Teacher ignores questions and moves on quickly.",teacher,negative
+"Recorded lectures help me review before quizzes.",materials,positive
+"The digital textbook login breaks half the time.",materials,negative
+"Group discussions are scheduled at convenient hours.",schedule,positive
+"Important announcements happen at odd hours with little notice.",schedule,negative
+"Supplemental videos clarify difficult chapters.",materials,positive
+"We lack enough sample exams to practice.",materials,negative
+"Teacher hosts office hours during finals week.",teacher,positive
+"Lectures rely too much on the slides without examples.",teacher,negative
+"The syllabus clearly maps topics to assessment dates.",schedule,positive
+"The class calendar changed repeatedly during the term.",schedule,negative
+"Practice quizzes accompany every lecture topic.",materials,positive
+"Printing the handouts is expensive because of heavy graphics.",materials,negative
+"Teacher gives pop quizzes that feel unfair.",teacher,negative
+"Teacher shares study guides that match the tests well.",teacher,positive
